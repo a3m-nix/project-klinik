@@ -38,10 +38,10 @@ class PasienController extends Controller
             'alamat' => 'nullable',
             'foto' => 'required|image|mimes:jpeg,png,jpg|max:5000',
         ]);
-        $model = new \App\Models\Pasien(); //membuat objek kosong
-        $model->fill($requestData); //mengisi objek dengan data yang sudah divalidasi requestData
-        $model->foto = $request->file('foto')->store('public'); //mengisi objek dengan pathFoto
-        $model->save();
+        $pasien = new \App\Models\Pasien(); //membuat objek kosong
+        $pasien->fill($requestData); //mengisi objek dengan data yang sudah divalidasi requestData
+        $pasien->foto = $request->file('foto')->store('public'); //mengisi objek dengan pathFoto
+        $pasien->save();
         flash('Data sudah disimpan')->success();
         return back();
     }
@@ -76,15 +76,15 @@ class PasienController extends Controller
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5000', //foto boleh null
             'alamat' => 'nullable',
         ]);
-        $model = \App\Models\Pasien::findOrFail($id);
-        $model->fill($requestData);
+        $pasien = \App\Models\Pasien::findOrFail($id);
+        $pasien->fill($requestData);
         //karena di validasi foto boleh null, maka perlu pengecekan apakah ada file foto yang diupload
         //jika ada maka file foto lama dihapus dan diganti dengan file foto yang baru
         if ($request->hasFile('foto')) {
-            Storage::delete($model->foto);
-            $model->foto = $request->file('foto')->store('public');
+            Storage::delete($pasien->foto);
+            $pasien->foto = $request->file('foto')->store('public');
         }
-        $model->save();
+        $pasien->save();
         flash('Data sudah diupdate')->success();
         return redirect('/pasien');
     }
@@ -94,11 +94,11 @@ class PasienController extends Controller
      */
     public function destroy(string $id)
     {
-        $model = \App\Models\Pasien::findOrFail($id);
-        if ($model->foto != null && Storage::exists($model->foto)) {
-            Storage::delete($model->foto);
+        $pasien = \App\Models\Pasien::findOrFail($id);
+        if ($pasien->foto != null && Storage::exists($pasien->foto)) {
+            Storage::delete($pasien->foto);
         }
-        $model->delete();
+        $pasien->delete();
         flash('Data sudah dihapus')->success();
         return back();
     }
