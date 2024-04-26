@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Data Pasien'])
+@extends('layouts.app_nice', ['title' => 'Data Pasien'])
 @section('content')
     <div class="card">
         <div class="card-body">
