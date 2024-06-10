@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Daftar;
 use App\Http\Requests\StoreDaftarRequest;
 use App\Http\Requests\UpdateDaftarRequest;
+use Illuminate\Http\Request;
 
 class DaftarController extends Controller
 {
@@ -22,23 +23,41 @@ class DaftarController extends Controller
      */
     public function create()
     {
-        //
+        $data['listPasien'] = \App\Models\Pasien::get();
+        $data['listPoli'] = [
+            'poli-umum' => 'Poli Umum',
+            'poli-gigi' => 'Poli Gigi',
+            'poli-mata' => 'Poli Mata',
+            'poli-anak' => 'Poli Anak',
+        ];
+        return view('daftar_create', $data);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDaftarRequest $request)
+    public function store(Request $request)
     {
-        //
+        $requestData = $request->validate([
+            'tanggal_daftar' => 'required',
+            'pasien_id' => 'required',
+            'poli' => 'required',
+            'keluhan' => 'required',
+        ]);
+        $model = new \App\Models\Daftar();
+        $model->fill($requestData);
+        $model->save();
+        flash('Data berhasil disimpan')->success();
+        return back();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Daftar $daftar)
+    public function show($id)
     {
-        //
+        $data['daftar'] = \App\Models\Daftar::findOrFail($id);
+        return view('daftar_show', $data);
     }
 
     /**
@@ -52,9 +71,17 @@ class DaftarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDaftarRequest $request, Daftar $daftar)
+    public function update(Request $request, $id)
     {
-        //
+        $requestData = $request->validate([
+            'tindakan' => 'required',
+            'diagnosis' => 'required',
+        ]);
+        $daftar = \App\Models\Daftar::findOrFail($id);
+        $daftar->fill($requestData);
+        $daftar->save();
+        flash('Data berhasil disimpan')->success();
+        return back();
     }
 
     /**
@@ -62,6 +89,8 @@ class DaftarController extends Controller
      */
     public function destroy(Daftar $daftar)
     {
-        //
+        $daftar->delete();
+        flash('Data berhasil dihapus')->success();
+        return back();
     }
 }

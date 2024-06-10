@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -35,5 +37,18 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    protected function loginApi(Request $request)
+    {
+        $loginData = $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
+        if (Auth::attempt($loginData)) {
+            $token = Auth::user()->createToken('authToken')->plainTextToken;
+            return response()->json(['data' => Auth::user(), 'token' => $token], 200);
+        }
+        return response()->json(['messages' => 'Invalid credentials', 401]);
     }
 }

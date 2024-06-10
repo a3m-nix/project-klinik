@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.app_modern')
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">DATA PENDAFTARAN PASIEN</div>
                     <div class="card-body">
@@ -31,7 +31,15 @@
                                         <td>{{ $item->poli }}</td>
                                         <td>{{ $item->keluhan }}</td>
                                         <td>
-                                            {{-- sengaja dikosongkan --}}
+                                            <a href="/daftar/{{ $item->id }}" class="btn btn-info btn-sm">Detail</a>
+                                            <form action="/daftar/{{ $item->id }}" method="post" class="d-inline">
+                                                @csrf
+                                                @method('delete')
+                                                <button class="btn btn-danger btn-sm ml-2"
+                                                    onclick="return confirm('Yakin ingin menghapus data?')">
+                                                    Hapus
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

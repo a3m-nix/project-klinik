@@ -12,7 +12,11 @@ class PasienController extends Controller
      */
     public function index()
     {
-        $data['pasien'] = \App\Models\Pasien::latest()->paginate(10);
+        $pasien = \App\Models\Pasien::latest()->paginate(10);
+        if (request()->wantsJson()) {
+            return response()->json($pasien);
+        }
+        $data['pasien'] = $pasien;
         return view('pasien_index', $data);
     }
 
@@ -42,6 +46,9 @@ class PasienController extends Controller
         $pasien->fill($requestData); //mengisi objek dengan data yang sudah divalidasi requestData
         $pasien->foto = $request->file('foto')->store('public'); //mengisi objek dengan pathFoto
         $pasien->save();
+        if ($request->wantsJson()) {
+            return response()->json($pasien);
+        }
         flash('Data sudah disimpan')->success();
         return back();
     }

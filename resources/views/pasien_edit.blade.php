@@ -1,6 +1,7 @@
-@extends('layouts.app', ['title' => 'Edit Data Pasien'])
+@extends('layouts.app_modern', ['title' => 'Edit Data Pasien'])
 @section('content')
     <div class="card">
+        <div class="card-header">Edit Pasien</div>
         <div class="card-body">
             <h5 class="card-title">Edit Data Pasien : {{ strtoupper($pasien->nama) }}</h5>
             <form action="/pasien/{{ $pasien->id }}" method="POST" enctype="multipart/form-data">

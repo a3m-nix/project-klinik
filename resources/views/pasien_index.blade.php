@@ -1,6 +1,7 @@
-@extends('layouts.app_nice', ['title' => 'Data Pasien'])
+@extends('layouts.app_modern', ['title' => 'Data Pasien'])
 @section('content')
     <div class="card">
+        <div class="card-header">Form Pasien</div>
         <div class="card-body">
             <h3>Data pasien</h3>
             <div class="row mb-3 mt-3">
